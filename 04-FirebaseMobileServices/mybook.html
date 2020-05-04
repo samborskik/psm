@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MyBook</title>
+    <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.13.2/firebase-firestore.js"></script>
+</head>
+<body>
+    <button id="load">Load</button>
+    <div id="book"></div>
+
+    <script>
+    var firebaseConfig = {
+        apiKey: "AIzaSyBpS46viBez-7l_uPDgUYDZ_FkVRCqjpE8",
+        authDomain: "psmobilnych.firebaseapp.com",
+        databaseURL: "https://psmobilnych.firebaseio.com",
+        projectId: "psmobilnych",
+        storageBucket: "psmobilnych.appspot.com",
+        messagingSenderId: "789964255180",
+        appId: "1:789964255180:web:ba663561702f8d466db769"
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    const firestore = firebase.firestore();
+    const bookData = firestore.doc("book/sampleBook");
+
+    const button = document.getElementById("load");
+    const book = document.getElementById("book");
+
+    button.addEventListener("click", function() {
+        bookData.get().then(function (doc) {
+            if(doc && doc.exists) {
+                const data = doc.data()
+                console.log(data)
+                for(let [item, value] of Object.entries(data)) {
+                    book.innerHTML += `<b>${item}</b>: ${value} <br>`
+                } 
+            }
+        }).catch(function (error) {
+            console.log("Error!")
+            console.log(error)
+        })
+    })
+    </script>
+
+</body>
+</html>
