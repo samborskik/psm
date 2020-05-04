@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+    <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-firestore.js"></script>    
+  </head>
+  <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+        apiKey: "AIzaSyBpS46viBez-7l_uPDgUYDZ_FkVRCqjpE8",
+        authDomain: "psmobilnych.firebaseapp.com",
+        databaseURL: "https://psmobilnych.firebaseio.com",
+        projectId: "psmobilnych",
+        storageBucket: "psmobilnych.appspot.com",
+        messagingSenderId: "789964255180",
+        appId: "1:789964255180:web:ba663561702f8d466db769"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    db.collection("cars").get().then(snapshot => {
+      snapshot.docs.forEach(doc => {
+        document.getElementById("table-body").innerHTML += `
+          <tr>
+            <td>
+              ${doc.data().car_manufacturer}
+            </td>
+            <td>
+              ${doc.data().car_model}
+            </td>
+            <td>
+              ${doc.data().car_hp}
+            </td>
+            <td>
+              ${doc.data().car_vin}
+            </td>
+            <td>
+              ${doc.data().car_year}
+            </td>
+          </tr>
+        `
+      })
+    })
+
+  </script>
+  <body>
+    <table border="1px solid black" style="border-collapse: collapse;">
+      <thead>
+        <tr>
+          <td>
+            Manufacturer
+          </td>
+          <td>
+            Model
+          </td>
+          <td>
+            Horse Power
+          </td>
+          <td>
+            Vin Number
+          </td>
+          <td>
+            Year
+          </td>
+        </tr>
+      </thead>
+      <tbody id="table-body">
+
+      </tbody>
+    </table>
+  </body>
+  </html>
