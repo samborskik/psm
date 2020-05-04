@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+    <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-firestore.js"></script>
+  </head>
+  <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+        apiKey: "AIzaSyBpS46viBez-7l_uPDgUYDZ_FkVRCqjpE8",
+        authDomain: "psmobilnych.firebaseapp.com",
+        databaseURL: "https://psmobilnych.firebaseio.com",
+        projectId: "psmobilnych",
+        storageBucket: "psmobilnych.appspot.com",
+        messagingSenderId: "789964255180",
+        appId: "1:789964255180:web:ba663561702f8d466db769"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    function getJsonData() {
+        console.log('run')
+				let req = new XMLHttpRequest()
+				req.overrideMimeType("application/json");
+				req.onreadystatechange = function() {
+					if (this.readyState === 4 && this.status === 200) {
+            let data = JSON.parse(this.responseText)
+						for(item of data) { 
+              db.collection("cars").add({
+                car_manufacturer: item.car_manufacturer,
+                car_model: item.car_model,
+                car_hp: item.car_hp,
+                car_vin: item.car_vin,
+                car_year: item.car_year,
+              })
+            }
+            console.log('done')
+					}
+				}
+				req.open('GET', "./cars.json")
+				req.send()
+			}
+  </script>
+  <body>
+    <button onclick="getJsonData()">
+      See data in console
+    </button>
+  </body>
+  </html>
