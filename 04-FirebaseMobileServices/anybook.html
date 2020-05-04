@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AnyBook</title>
+    <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.13.2/firebase-firestore.js"></script>
+</head>
+<body>
+    <form>
+        <label for="name">Author's name:</label>
+        <input type="text" id="name">
+
+        <label for="title">Book's title:</label>
+        <input type="text" id="title">
+
+        <label for="genre">Genre:</label>
+        <input type="text" id="genre">
+
+        <label for="year">Year:</label>
+        <input type="text" id="year">
+
+        <label for="isbn">ISBN:</label>
+        <input type="text" id="isbn">
+    </form>
+
+    <button id="sendBtn">SEND</button>
+    <button id="loadBtn">LOAD</button>
+    
+    <div id="book"></div>
+
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyBpS46viBez-7l_uPDgUYDZ_FkVRCqjpE8",
+            authDomain: "psmobilnych.firebaseapp.com",
+            databaseURL: "https://psmobilnych.firebaseio.com",
+            projectId: "psmobilnych",
+            storageBucket: "psmobilnych.appspot.com",
+            messagingSenderId: "789964255180",
+            appId: "1:789964255180:web:ba663561702f8d466db769"  ,
+            measurementId: "G-YYKXCY5QT8"
+        };
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+    
+        const firestore = firebase.firestore();
+        const bookData = firestore.doc("book/sampleBook");
+    
+        const loadBtn = document.getElementById("loadBtn");
+        const sendBtn = document.getElementById("sendBtn");
+        const book = document.getElementById("book");
+
+        const name = document.getElementById("name")
+        const title = document.getElementById("title")
+        const genre = document.getElementById("genre")
+        const year = document.getElementById("year")
+        const isbn = document.getElementById("isbn")
+
+        sendBtn.addEventListener("click", function () {
+            const saveBook = [name.value, title.value, genre.value, year.value, isbn.value]
+
+            bookData.set({
+                author: saveBook[0],
+                title: saveBook[1],
+                genre: saveBook[2],
+                year: saveBook[3],
+                isbn: saveBook[4]
+            }).then(function () {
+                console.log('Book has been added.')
+            }).catch(function (error) {
+                console.log("Error!")
+                console.log(error)
+            })
+        })
+
+    
+        loadBtn.addEventListener("click", function() {
+            bookData.get().then(function (doc) {
+                if(doc && doc.exists) {
+                    const data = doc.data()
+                    console.log(data)
+                    for(let [item, value] of Object.entries(data)) {
+                        book.innerHTML += `<b>${item}</b>: ${value} <br>`
+                    } 
+                }
+            }).catch(function (error) {
+                console.log("Error!")
+                console.log(error)
+            })
+        })
+        </script>
+
+    <style>
+        input {
+            display: block;
+        }
+    </style>
+</body>
+</html>
